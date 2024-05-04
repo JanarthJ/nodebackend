@@ -2,7 +2,7 @@
 //step 1
 var express = require("express"); //import 
 var mongoose = require("mongoose");
-var studentRoute = require("./routes/studentRoutes");
+var studentRoute = require("./routes/studentRoutes"); //phase 6
 //step 2
 var app = express();
 app.use(express.json());
@@ -24,7 +24,7 @@ mongoose.connect(uri,connectionParams)
 
 
 //step 6 mention api path here
-app.use("/student",studentRoute);
+app.use("/student",studentRoute);  //phase 6
 // http://localhost:5000/student/register
 
 
@@ -36,3 +36,18 @@ app.listen(5000,()=>{
 });
 
 
+
+// Model.find() -- findall 
+// Model.findById()
+// Model.findByIdAndDelete() -- version 4 introduced
+// Model.findByIdAndRemove() -- version 4  and after version 4 deprecated
+// Model.findByIdAndUpdate()
+// Model.findOne()
+// Model.findOneAndDelete()
+// Model.findOneAndReplace() 
+// Model.findOneAndUpdate()
+// Model.replaceOne()
+// Model.updateMany()
+// Model.updateOne()
+// Model.deleteMany()
+// Model.deleteOne() // 
