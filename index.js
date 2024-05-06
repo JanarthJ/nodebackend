@@ -37,15 +37,16 @@ app.listen(5000,()=>{
 
 
 
-// Model.find() -- findall 
-// Model.findById()
-// Model.findByIdAndDelete() -- version 4 introduced
-// Model.findByIdAndRemove() -- version 4  and after version 4 deprecated
-// Model.findByIdAndUpdate()
-// Model.findOne()
-// Model.findOneAndDelete()
-// Model.findOneAndReplace() 
-// Model.findOneAndUpdate()
+//1 Model.find() -- findall 
+//2 Model.findById()
+//3 Model.findByIdAndDelete() -- version 4 introduced
+//4 Model.findByIdAndRemove() -- version 4  and after version 4 deprecated
+//5 Model.findByIdAndUpdate()
+
+//6 Model.findOne()
+//7 Model.findOneAndDelete()
+//8 Model.findOneAndReplace() 
+//9 Model.findOneAndUpdate()
 // Model.replaceOne()
 // Model.updateMany()
 // Model.updateOne()

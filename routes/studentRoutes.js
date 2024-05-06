@@ -9,5 +9,7 @@ router.get("/getStudent",studentController.getStudent);
 router.post("/getStudentbyid",studentController.getStudentById);
 router.put("/updateStudentbyid",studentController.updateStudentByID);
 router.post("/deleteStudentbyid",studentController.deleteStudentByID);
+// //using db property 
+router.post("/getStudentbyname",studentController.getStudentByproperty);
 //step 3
 module.exports = router;

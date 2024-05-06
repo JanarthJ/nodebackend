@@ -93,13 +93,31 @@ const deleteStudentByID = async(req,res)=>{
     }
 }
 
+// property -- name, age,address, nationality
+//getStudentByName
+const getStudentByproperty = async(req,res)=>{
+    try{
+        const data =  req.body;
+        //const st = await Student.findOne({name:req.body.name});
+        const st = await Student.find({age:req.body.age});
+        //const st = await Student.findOne({age:req.body.age});
+        // const st = await Student.findOne({nationality:req.body.nationality});
+        res.send({Status:"Success",data:st});
+    }catch(err){
+        console.log(err);
+        res.send({Status:"Fail",data:err});
+    }
+}
 
 //step 3
 module.exports = {
     createStudent,
+    //using db _id 
     getStudent,
     getStudentById,
     updateStudentByID,
-    deleteStudentByID
+    deleteStudentByID,
+    //using db property 
+    getStudentByproperty
 };
 
