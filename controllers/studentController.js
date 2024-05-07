@@ -109,6 +109,83 @@ const getStudentByproperty = async(req,res)=>{
     }
 }
 
+const getStudentBypropertyAndUpdate = async(req,res)=>{
+    try{
+        const data =  req.body;
+        //const st = await Student.findOne({name:req.body.name});
+        const st = await Student.findOneAndUpdate({name:req.body.name},{age:req.body.age},{new:true});
+        //const st = await Student.findOne({age:req.body.age});
+        // const st = await Student.findOne({nationality:req.body.nationality});
+        res.send({Status:"Success",data:st});
+    }catch(err){
+        console.log(err);
+        res.send({Status:"Fail",data:err});
+    }
+}
+
+const getStudentBypropertyAndReplace = async(req,res)=>{
+    try{
+        const data =  req.body;
+        //const st = await Student.findOne({name:req.body.name});
+       
+      
+        const st = await Student.findOneAndReplace( {name:req.body.name},{name:"PRAV",age:20,address:"Bangalore"},{new:true});
+        //const st = await Student.findOne({age:req.body.age});
+        // const st = await Student.findOne({nationality:req.body.nationality});
+        res.send({Status:"Success",data:st});
+    }catch(err){
+        console.log(err);
+        res.send({Status:"Fail",data:err});
+    }
+}
+
+const getStudentBypropertyAndDelete = async(req,res)=>{
+    try{
+        const data =  req.body;
+        //const st = await Student.findOne({name:req.body.name});
+        const st = await Student.findOneAndDelete({name:req.body.name});
+        //const st = await Student.findOne({age:req.body.age});
+        // const st = await Student.findOne({nationality:req.body.nationality});
+        res.send({Status:"Success",data:st});
+    }catch(err){
+        console.log(err);
+        res.send({Status:"Fail",data:err});
+    }
+}
+
+//many data
+const updatemanystudents = async(req,res)=>{
+    try{
+        const data =  req.body;
+        //const st = await Student.findOne({name:req.body.name});
+        const st = await Student.updateMany({age:req.body.age},{name:"CSE"},{ isActive: true });
+        //const st = await Student.findOne({age:req.body.age});
+        // const st = await Student.findOne({nationality:req.body.nationality});
+        res.send({Status:"Success",data:st});
+    }catch(err){
+        console.log(err);
+        res.send({Status:"Fail",data:err});
+    }
+}
+
+const deletemanystudents = async(req,res)=>{
+    try{
+        const data =  req.body;
+        //const st = await Student.findOne({name:req.body.name});
+        const st = await Student.deleteMany({ isActive: true });
+        //const st = await Student.findOne({age:req.body.age});
+        // const st = await Student.findOne({nationality:req.body.nationality});
+        res.send({Status:"Success",data:st});
+    }catch(err){
+        console.log(err);
+        res.send({Status:"Fail",data:err});
+    }
+}
+
+
+
+
+
 //step 3
 module.exports = {
     createStudent,
@@ -118,6 +195,11 @@ module.exports = {
     updateStudentByID,
     deleteStudentByID,
     //using db property 
-    getStudentByproperty
+    getStudentByproperty,
+    getStudentBypropertyAndUpdate,
+    getStudentBypropertyAndReplace,
+    getStudentBypropertyAndDelete,
+    updatemanystudents,
+    deletemanystudents
 };
 

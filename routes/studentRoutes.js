@@ -11,5 +11,11 @@ router.put("/updateStudentbyid",studentController.updateStudentByID);
 router.post("/deleteStudentbyid",studentController.deleteStudentByID);
 // //using db property 
 router.post("/getStudentbyname",studentController.getStudentByproperty);
+router.put("/getandupdateStudentbyname",studentController.getStudentBypropertyAndUpdate);
+router.put("/getandreplace",studentController.getStudentBypropertyAndReplace);
+router.put("/getanddelete",studentController.getStudentBypropertyAndDelete);
+// many data
+router.put("/updatemany",studentController.updatemanystudents);
+router.put("/deletemany",studentController.deletemanystudents);
 //step 3
 module.exports = router;
