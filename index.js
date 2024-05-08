@@ -3,6 +3,7 @@
 var express = require("express"); //import 
 var mongoose = require("mongoose");
 var studentRoute = require("./routes/studentRoutes"); //phase 6
+var userRoute = require("./routes/userRoute"); //phase 6
 //step 2
 var app = express();
 app.use(express.json());
@@ -25,6 +26,7 @@ mongoose.connect(uri,connectionParams)
 
 //step 6 mention api path here
 app.use("/student",studentRoute);  //phase 6
+app.use("/user",userRoute);  //phase 6
 // http://localhost:5000/student/register
 
 
