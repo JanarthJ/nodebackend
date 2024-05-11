@@ -1,6 +1,7 @@
 //step 1
 const mongoose = require("mongoose");
 const Student = require("../modal/student");
+const Mark = require("../modal/mark");
 
 //step 2 
 const getstudentuser = async(req,res)=>{
@@ -30,7 +31,53 @@ const getstudentuser = async(req,res)=>{
     }
 }
 
+const getstudentmarks = async(req,res)=>{
+    try{
+        const data =  req.body;        
+        const st = await Student.aggregate([
+            {
+                $lookup:{
+                    from:"marks", // target table location -- > mark
+                    localField:"name", // local table -- student name -> common field
+                    foreignField:"name", // target label -- mark name -> common field
+                    as:"previousmark" // studentmark
+                }
+            },            
+            {
+                $lookup:{
+                    from:"marks", // target table location -- > mark
+                    localField:"name", // local table -- student name -> common field
+                    foreignField:"name", // target label -- mark name -> common field
+                    as:"studentmark" // studentmark
+                }
+            },            
+            {
+                $project:{
+                    name:1,
+                    age:1,
+                    previousmark:1,
+                    'studentmark.subject1' : 1,
+                    'studentmark.subject2' : 1,
+                    'studentmark.subject3' : 1,
+                    'studentmark.subject4' : 1,
+                    'studentmark.subject5' : 1
+                }
+            }
+        ]).then(result=>{
+            console.log(result);
+            res.send({Status:"Success",data:result});
+        }).catch(err=>{
+            console.log(err);
+            res.send({Status:"Fail",data:err});
+        })        
+    }catch(err){
+        console.log(err);
+        res.send({Status:"Fail",data:err});
+    }
+}
+
 //step 3
 module.exports = {
-    getstudentuser
+    getstudentuser,
+    getstudentmarks
 }

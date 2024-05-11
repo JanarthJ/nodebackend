@@ -1,6 +1,37 @@
 //step 1
 const mongoose = require("mongoose");
 const Student = require("../modal/student");
+const Mark = require("../modal/mark");
+
+//step 2
+const createMark = async(req,res)=>{
+    try{
+        const data = req.body;
+        console.log(data);
+        // validation 
+        
+        //step 4
+        // const st = await Student.create(data)
+        const st = await Mark.create({
+            name:"PK",
+            subject1:70,
+            subject2:65,
+            subject3:79,
+            subject4:84,
+            subject5:87,
+        }).then((result)=>{
+            console.log(result);
+            res.send({status:"Success",data:result});
+        })
+        .catch((err)=>{
+            console.err(err);
+            res.send({status:"Fail",data:err});
+        })
+    }catch(err){
+        console.err(err);
+    }
+}
+
 
 //step 2
 const createStudent = async(req,res)=>{
@@ -186,6 +217,8 @@ const deletemanystudents = async(req,res)=>{
 
 
 
+
+
 //step 3
 module.exports = {
     createStudent,
@@ -200,6 +233,8 @@ module.exports = {
     getStudentBypropertyAndReplace,
     getStudentBypropertyAndDelete,
     updatemanystudents,
-    deletemanystudents
+    deletemanystudents,
+
+    createMark,
 };
 
