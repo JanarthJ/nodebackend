@@ -7,6 +7,8 @@ const studentController = require("../controllers/studentController");
 router.post("/registermark",studentController.createMark);
 
 router.post("/register",studentController.createStudent);
+router.post("/login",studentController.LoginStudent);
+
 router.get("/getStudent",studentController.getStudent);
 router.post("/getStudentbyid",studentController.getStudentById);
 router.put("/updateStudentbyid",studentController.updateStudentByID);

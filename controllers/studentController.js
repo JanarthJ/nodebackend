@@ -2,7 +2,39 @@
 const mongoose = require("mongoose");
 const Student = require("../modal/student");
 const Mark = require("../modal/mark");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
+const hashMyPassword = async(mypassword)=>{
+    // tech 1
+    // bcrypt.genSalt(saltRounds, function(err, salt) {
+    //     bcrypt.hash(mypassword, salt, function(err, hash) {
+    //         // Store hash in your password DB.
+    //         console.log(hash);
+    //         // return hash;
+    //     });
+    // });
+
+    // // tech 2
+    // bcrypt.hash(mypassword, saltRounds, function(err, hash) {
+    //     // Store hash in your password DB.
+    //     console.log(hash);
+    //     return hash;
+    // });
+
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hash = bcrypt.hashSync(mypassword, salt);
+    return hash;
+
+    // let hash = "$2b$10$eaWR.fDRUQ6YVYnk0taxKOFf8JBbD0Mfck2YAobUaS9pRVW9oCP5i";
+    let myPlaintextPassword = "abcd@123";
+    bcrypt.compare(myPlaintextPassword, hash, function(err, result) {
+        // result == true
+        console.log(result);
+    });
+
+
+}
 //step 2
 const createMark = async(req,res)=>{
     try{
@@ -23,12 +55,12 @@ const createMark = async(req,res)=>{
             console.log(result);
             res.send({status:"Success",data:result});
         })
-        .catch((err)=>{
-            console.err(err);
-            res.send({status:"Fail",data:err});
+        .catch((error)=>{
+            console.error(error);
+            res.send({status:"Fail",data:error});
         })
-    }catch(err){
-        console.err(err);
+    }catch(error){
+        console.error(error);
     }
 }
 
@@ -39,45 +71,73 @@ const createStudent = async(req,res)=>{
         const data = req.body;
         console.log(data);
         // validation 
-        
+        // let hashpass = await hashMyPassword(data.password);
+        // console.log(hashpass);
+        // res.send({status:"Success",data:hashpass});
         //step 4
         // const st = await Student.create(data)
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const hash = bcrypt.hashSync(data.password, salt);        
+
         const st = await Student.create({
             name:data.name,
             age:data.age,
             address:data.address,
+            password:hash,
             nationality:"Indian"
         }).then((result)=>{
             console.log(result);
             res.send({status:"Success",data:result});
         })
-        .catch((err)=>{
-            console.err(err);
-            res.send({status:"Fail",data:err});
+        .catch((error)=>{
+            console.error(error);
+            res.send({status:"Fail",data:error});
         })
-    }catch(err){
-        console.err(err);
+    }catch(error){
+        console.error(error);
     }
 }
+
+const LoginStudent = async(req,res)=>{
+    try{
+        const data =  req.body;
+        const st = await Student.findOne({name:data.name});
+        console.log(st);
+        console.log(st.password);
+        let isAuth = bcrypt.compareSync(data.password, st.password);
+        console.log(isAuth);
+        if(isAuth){
+            st['password'] = "";            
+            res.send({Status:"Auth Success",data:st});
+        }else{
+            res.send({Status:"Invalid credential",data:{}});
+        }
+        
+    }catch(error){
+        console.log(error);
+        res.send({Status:"Fail",data:error});
+    }
+}
+
 
 const getStudent = async(req,res)=>{
     try{
         const st = await Student.find();
         res.send({Status:"Success",data:st});
-    }catch(err){
-        console.log(err);
-        res.send({Status:"Fail",data:err});
+    }catch(error){
+        console.log(error);
+        res.send({Status:"Fail",data:error});
     }
 }
 
 const getStudentById = async(req,res)=>{
     try{
         const data =  req.body;
-        const st = await Student.findById(data._id);
+        const st = await Student.findById(data._id);        
         res.send({Status:"Success",data:st});
-    }catch(err){
-        console.log(err);
-        res.send({Status:"Fail",data:err});
+    }catch(error){
+        console.log(error);
+        res.send({Status:"Fail",data:error});
     }
 }
 
@@ -94,12 +154,12 @@ const updateStudentByID = async(req,res)=>{
             const updatedStudent = await Student.findById(data._id);
             res.send({status:"Success",data:updatedStudent});
         })
-        .catch((err)=>{
-            console.err(err);
-            res.send({status:"Fail",data:err});
+        .catch((error)=>{
+            console.error(error);
+            res.send({status:"Fail",data:error});
         })
-    }catch(err){
-        console.err(err);
+    }catch(error){
+        console.error(error);
     }
 }
 
@@ -115,12 +175,12 @@ const deleteStudentByID = async(req,res)=>{
             // const updatedStudent = await Student.findById(data._id);
             res.send({status:"Success",data:result});
         })
-        .catch((err)=>{
-            console.err(err);
-            res.send({status:"Fail",data:err});
+        .catch((error)=>{
+            console.error(error);
+            res.send({status:"Fail",data:error});
         })
-    }catch(err){
-        console.err(err);
+    }catch(error){
+        console.error(error);
     }
 }
 
@@ -134,9 +194,9 @@ const getStudentByproperty = async(req,res)=>{
         //const st = await Student.findOne({age:req.body.age});
         // const st = await Student.findOne({nationality:req.body.nationality});
         res.send({Status:"Success",data:st});
-    }catch(err){
-        console.log(err);
-        res.send({Status:"Fail",data:err});
+    }catch(error){
+        console.log(error);
+        res.send({Status:"Fail",data:error});
     }
 }
 
@@ -148,9 +208,9 @@ const getStudentBypropertyAndUpdate = async(req,res)=>{
         //const st = await Student.findOne({age:req.body.age});
         // const st = await Student.findOne({nationality:req.body.nationality});
         res.send({Status:"Success",data:st});
-    }catch(err){
-        console.log(err);
-        res.send({Status:"Fail",data:err});
+    }catch(error){
+        console.log(error);
+        res.send({Status:"Fail",data:error});
     }
 }
 
@@ -164,9 +224,9 @@ const getStudentBypropertyAndReplace = async(req,res)=>{
         //const st = await Student.findOne({age:req.body.age});
         // const st = await Student.findOne({nationality:req.body.nationality});
         res.send({Status:"Success",data:st});
-    }catch(err){
-        console.log(err);
-        res.send({Status:"Fail",data:err});
+    }catch(error){
+        console.log(error);
+        res.send({Status:"Fail",data:error});
     }
 }
 
@@ -178,9 +238,9 @@ const getStudentBypropertyAndDelete = async(req,res)=>{
         //const st = await Student.findOne({age:req.body.age});
         // const st = await Student.findOne({nationality:req.body.nationality});
         res.send({Status:"Success",data:st});
-    }catch(err){
-        console.log(err);
-        res.send({Status:"Fail",data:err});
+    }catch(error){
+        console.log(error);
+        res.send({Status:"Fail",data:error});
     }
 }
 
@@ -193,9 +253,9 @@ const updatemanystudents = async(req,res)=>{
         //const st = await Student.findOne({age:req.body.age});
         // const st = await Student.findOne({nationality:req.body.nationality});
         res.send({Status:"Success",data:st});
-    }catch(err){
-        console.log(err);
-        res.send({Status:"Fail",data:err});
+    }catch(error){
+        console.log(error);
+        res.send({Status:"Fail",data:error});
     }
 }
 
@@ -207,9 +267,9 @@ const deletemanystudents = async(req,res)=>{
         //const st = await Student.findOne({age:req.body.age});
         // const st = await Student.findOne({nationality:req.body.nationality});
         res.send({Status:"Success",data:st});
-    }catch(err){
-        console.log(err);
-        res.send({Status:"Fail",data:err});
+    }catch(error){
+        console.log(error);
+        res.send({Status:"Fail",data:error});
     }
 }
 
@@ -234,7 +294,7 @@ module.exports = {
     getStudentBypropertyAndDelete,
     updatemanystudents,
     deletemanystudents,
-
+    LoginStudent,
     createMark,
 };
 
