@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const studentController = require("../controllers/studentController");
+const authGaurd = require("../middleware/authGaurd");
 
 //step 2
 router.post("/registermark",studentController.createMark);
@@ -9,7 +10,7 @@ router.post("/registermark",studentController.createMark);
 router.post("/register",studentController.createStudent);
 router.post("/login",studentController.LoginStudent);
 
-router.get("/getStudent",studentController.getStudent);
+router.get("/getStudent",authGaurd,studentController.getStudent);
 router.post("/getStudentbyid",studentController.getStudentById);
 router.put("/updateStudentbyid",studentController.updateStudentByID);
 router.post("/deleteStudentbyid",studentController.deleteStudentByID);

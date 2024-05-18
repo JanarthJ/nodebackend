@@ -4,6 +4,11 @@ const Student = require("../modal/student");
 const Mark = require("../modal/mark");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+//step 1 --> import and generate key 
+//node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+// above command is to generate the key.
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = "9d1758659c3a6136814b4a78d9ee5eaedfa4308c507d9e3cb330be0331f1ec50";
 
 const hashMyPassword = async(mypassword)=>{
     // tech 1
@@ -107,8 +112,10 @@ const LoginStudent = async(req,res)=>{
         let isAuth = bcrypt.compareSync(data.password, st.password);
         console.log(isAuth);
         if(isAuth){
+            //step 2
+            const token = jwt.sign({userid:st._id,username:st.name,userage:st.age},SECRET_KEY,{expiresIn:'1h'});
             st['password'] = "";            
-            res.send({Status:"Auth Success",data:st});
+            res.send({Status:"Auth Success",data:token});
         }else{
             res.send({Status:"Invalid credential",data:{}});
         }
