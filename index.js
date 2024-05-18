@@ -4,11 +4,12 @@ var express = require("express"); //import
 var mongoose = require("mongoose");
 var studentRoute = require("./routes/studentRoutes"); //phase 6
 var userRoute = require("./routes/userRoute"); //phase 6
+const cors = require("cors");
 //step 2
 var app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cors());
 
 // step 4 api creation
 //HTTPS
